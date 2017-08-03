@@ -14825,6 +14825,8 @@ var App = function (_Component) {
         null,
         'this is my react app',
         _react2.default.createElement(_Maps2.default, {
+          center: { lat: 34.1789377, lng: -118.4338344 },
+          zoom: 12,
           containerElement: _react2.default.createElement('div', { style: { height: '200px' } }),
           mapElement: _react2.default.createElement('div', { style: { height: '100px' } })
         })
@@ -26086,10 +26088,33 @@ var Maps = function (_Component) {
   function Maps() {
     _classCallCheck(this, Maps);
 
-    return _possibleConstructorReturn(this, (Maps.__proto__ || Object.getPrototypeOf(Maps)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (Maps.__proto__ || Object.getPrototypeOf(Maps)).call(this));
+
+    _this.state = {
+      map: null
+    };
+    return _this;
   }
 
   _createClass(Maps, [{
+    key: "mapMoved",
+    value: function mapMoved() {
+      console.log("map is moving yo" + JSON.stringify(this.state.map.getCenter()));
+    }
+  }, {
+    key: "zoomChanged",
+    value: function zoomChanged() {
+      console.log("map zoom " + this.state.map.getZoom());
+    }
+  }, {
+    key: "mapLoaded",
+    value: function mapLoaded(map) {
+      if (this.state.map != null) return;
+      this.setState({
+        map: map
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       var markers = this.props.markers || [];
@@ -26097,8 +26122,11 @@ var Maps = function (_Component) {
       return _react2.default.createElement(
         _reactGoogleMaps.GoogleMap,
         {
-          defaultZoom: 3,
-          defaultCenter: { lat: -25.363882, lng: 131.044922 } },
+          ref: this.mapLoaded.bind(this),
+          onDragEnd: this.mapMoved.bind(this),
+          onZoomChanged: this.zoomChanged.bind(this),
+          defaultZoom: this.props.zoom,
+          defaultCenter: this.props.center },
         markers.map(function (marker, index) {
           return _react2.default.createElement(_reactGoogleMaps.Marker, marker);
         })

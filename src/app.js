@@ -8,6 +8,8 @@ class App extends Component {
         <div>
           this is my react app
           <Maps
+            center={{lat:34.1789377,lng:-118.4338344}}
+            zoom={12}
             containerElement={
               <div style={{ height: `200px` }} />
             }
